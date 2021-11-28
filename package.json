@@ -1,45 +1,52 @@
 {
   "name": "inspire-me",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/server.ts",
+  "main": "./src/server.ts",
   "scripts": {
+    "build": "babel src --out-dir lib --ignore '**/*.test.ts' --extensions .ts",
     "start": "ts-node-dev .",
     "lint": "eslint . --fix --ext .js,.json,.ts --quiet",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "generate": "prisma generate --schema ./src/db/prisma/schema.prisma"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KolesnykMA/inspire-me.git"
   },
-  "author": "",
-  "license": "ISC",
+  "babel": {
+    "extends": "@shelf/babel-config/backend"
+  },
   "prettier": "@shelf/prettier-config",
   "dependencies": {
-    "@prisma/client": "^3.5.0",
-    "@shelf/eslint-config": "2.5.2",
-    "@shelf/prettier-config": "1.0.0",
-    "@shelf/tsconfig": "0.0.6",
-    "@types/express": "4.17.13",
-    "@types/http-errors": "^1.8.1",
-    "@types/lodash": "^4.14.177",
-    "@types/node": "^16.11.10",
+    "@prisma/client": "3.5.0",
     "body-parser": "1.19.0",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
+    "cors": "2.8.5",
+    "dotenv": "10.0.0",
     "express": "4.17.1",
-    "http-errors": "^1.8.1",
+    "http-errors": "1.8.1",
     "lodash": "4.17.21",
-    "sequelize": "^6.12.0-alpha.1",
-    "ts-node-dev": "1.1.8"
+    "ts-node-dev": "1.1.8",
+    "winston": "3.3.3"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.12",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@types/cors": "2.8.12",
+    "@shelf/babel-config": "0.1.5",
+    "@shelf/eslint-config": "2.5.2",
+    "@shelf/tsconfig": "0.0.6",
+    "@types/express": "4.17.13",
+    "@types/http-errors": "1.8.1",
+    "@types/jest": "27.0.3",
+    "@types/lodash": "4.14.177",
+    "@types/node": "16.11.10",
+    "@shelf/prettier-config": "1.0.0",
+    "babel-jest": "^27.3.1",
     "eslint": "7.32.0",
     "jest": "27.3.1",
     "prettier": "2.5.0",
     "prisma": "3.5.0",
-    "ts-node": "^10.4.0",
+    "ts-node": "10.4.0",
     "typescript": "4.5.2"
   }
 }

@@ -1,12 +1,9 @@
 .vscode/
+.idea/
+
+.env
+combined.log
+
 lib/
 node_modules/
-
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/shelf
-.idea/$CACHE_FILE$
-.idea/$PRODUCT_WORKSPACE_FILE$
-.idea/.gitignore
+src/db/prisma/migrations/
