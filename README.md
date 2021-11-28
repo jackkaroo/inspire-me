@@ -1,8 +1,11 @@
 # inspire-me
 
-1. Install postgres: https://www.postgresql.org/download/
-2. Install all packages: **npm i**
-3. Create new file with name .env and paste lines from example.env into it
-4. Inside .env file
-5. Run migrations: **npx prisma migrate dev --schema ./src/db/prisma/schema.prisma** (You have to run migrations to generate/alter PostgreSQL tables)
-6. Generate models: **npm run generate** (You have to run generate to create ORM classes based on SQL schema describe in src/db/prisma/schema.prisma)
+1. Install PostgreSQL if not installed: https://www.postgresql.org/download/
+2. Install Node: https://nodejs.org/uk/download/
+3. Inside project folder install all packages with: **npm i**
+4. Create new file with name _.env_ and paste lines from _example.env_ into it
+5. Inside _.env_ file insert correct credentials in _DATABASE_URL_
+6. Run migrations: **npx prisma migrate dev --schema ./src/db/prisma/schema.prisma** (You have to run migrations to generate/alter PostgreSQL database tables)
+7. Generate ORM models: **npm run generate** (You have to run generate to create/update ORM classes that are based on SQL schema described in src/db/prisma/schema.prisma)
+
+More about Prisma ORM: https://www.prisma.io/
