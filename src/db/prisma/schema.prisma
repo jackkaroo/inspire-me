@@ -8,7 +8,137 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
+  id Int @id @default(autoincrement())
+
+  email String  @unique
+  name  String?
+
+  avatarId Int?
+  avatar   Image? @relation(fields: [avatarId], references: [id])
+
+  followers     Following[]    @relation("WhoFollows")
+  followed      Following[]    @relation("WhoIsFollowed")
+  likes         Like[]         @relation("UserWhoLiked")
+  subscriptions Subscription[] @relation("UserSubscriptions")
+
+
+
+  Challenge Challenge[]
+  Comment   Comment[]
+}
+
+model Content {
+  id Int @id @default(autoincrement())
+
+  type ContentType
+
+  likes     Like[]         @relation("LikedContent")
+  images    ContentImage[]
+  Challenge Challenge[]
+  Milestone Milestone[]
+  Comment   Comment[]
+}
+
+enum ContentType {
+  CHALLENGE
+  MILESTONE
+}
+
+model Challenge {
+  id      Int     @id
+  content Content @relation(fields: [id], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  title       String
+  description String
+  deadline    DateTime?
+  createdAt   DateTime  @default(now())
+
+  parentId Int?
+  Parent   Challenge? @relation(name: "ParentChallenge", fields: [parentId], references: [id])
+
+  subscriptions Subscription[]
+  Challenge     Challenge[]    @relation("ParentChallenge")
+  Milestone     Milestone[]
+}
+
+model Milestone {
+  id      Int     @id
+  Content Content @relation(fields: [id], references: [id])
+
+  challengeId Int
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+
+  contentId Int
+  content   Content @relation(fields: [id], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  text      String
+  createdAt DateTime @default(now())
+
+  commentId      Int?
+  comment        Comment?  @relation(name: "CommentToReply", fields: [commentId], references: [id])
+  commentToReply Comment[] @relation("CommentToReply")
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+
+  path String
+
+  holders ContentImage[]
+  User    User[]
+}
+
+model ContentImage {
+  contentId Int
+  imageId   Int
+
+  content Content @relation(fields: [contentId], references: [id])
+  image   Image   @relation(fields: [imageId], references: [id])
+
+  pos Int
+
+  @@id([contentId, imageId])
+}
+
+model Following {
+  whoId  Int
+  whomId Int
+
+  who  User @relation(name: "WhoFollows", fields: [whoId], references: [id])
+  whom User @relation(name: "WhoIsFollowed", fields: [whomId], references: [id])
+
+  @@id([whoId, whomId])
+}
+
+model Subscription {
+  challengeId Int
+  userId      Int
+
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+  user      User      @relation(name: "UserSubscriptions", fields: [userId], references: [id])
+
+  @@id([challengeId, userId])
+}
+
+model Like {
+  contentId Int
+  userId    Int
+
+  content Content @relation(name: "LikedContent", fields: [contentId], references: [id])
+  user    User    @relation(name: "UserWhoLiked", fields: [userId], references: [id])
+
+  @@id([contentId, userId])
 }
