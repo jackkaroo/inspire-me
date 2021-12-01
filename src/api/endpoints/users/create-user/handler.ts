@@ -1,15 +1,11 @@
 import {Request, Response} from 'express';
-import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
-import {wrapHandler} from '../../../middlewares/handler-wrapper';
+import {wrapHandler} from '../../../utils/handler-wrapper';
+import {schema} from './schema';
 
 export async function handler(req: Request, res: Response): Promise<void> {
   const {name, email} = req.body;
-
-  if (!name || !email) {
-    throw createHttpError(422, `Attributes required: [name, email]`);
-  }
 
   const user = await prisma.user.create({
     data: {
@@ -22,4 +18,4 @@ export async function handler(req: Request, res: Response): Promise<void> {
   res.send(user);
 }
 
-export const createUserHandler = wrapHandler(handler);
+export const createUserHandler = wrapHandler(handler, schema);

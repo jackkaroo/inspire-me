@@ -15,6 +15,7 @@ export function handleError(
         statusCode: error.statusCode,
         message: error.message,
         ...(error.code && {code: error.code}),
+        ...(error.details && {details: error.details}),
       },
     });
   }

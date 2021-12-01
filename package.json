@@ -19,6 +19,7 @@
   "prettier": "@shelf/prettier-config",
   "dependencies": {
     "@prisma/client": "3.5.0",
+    "ajv": "^8.8.2",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
     "dotenv": "10.0.0",
