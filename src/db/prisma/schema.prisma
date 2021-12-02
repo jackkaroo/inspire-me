@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -11,20 +12,24 @@ model User {
   id Int @id @default(autoincrement())
 
   email String  @unique
-  name  String?
+  name  String
+  hash String
+  role UserRole
 
   avatarId Int?
-  avatar   Image? @relation(fields: [avatarId], references: [id])
+  avatar   Image? @relation(fields: [avatarId], references: [id], onDelete: SetNull)
 
   followers     Following[]    @relation("WhoFollows")
   followed      Following[]    @relation("WhoIsFollowed")
   likes         Like[]         @relation("UserWhoLiked")
   subscriptions Subscription[] @relation("UserSubscriptions")
+  challenges    Challenge[]
+  comment       Comment[]
+}
 
-
-
-  Challenge Challenge[]
-  Comment   Comment[]
+enum UserRole {
+    USER
+    MODERATOR
 }
 
 model Content {
@@ -34,9 +39,10 @@ model Content {
 
   likes     Like[]         @relation("LikedContent")
   images    ContentImage[]
-  Challenge Challenge[]
-  Milestone Milestone[]
-  Comment   Comment[]
+  challenge Challenge[]
+  milestone Milestone[]
+
+  comment Comment[]
 }
 
 enum ContentType {
@@ -46,30 +52,30 @@ enum ContentType {
 
 model Challenge {
   id      Int     @id
-  content Content @relation(fields: [id], references: [id])
+  content Content @relation(fields: [id], references: [id], onDelete: Cascade)
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   title       String
   description String
-  deadline    DateTime?
+  deadline    DateTime? @db.Date
   createdAt   DateTime  @default(now())
 
   parentId Int?
-  Parent   Challenge? @relation(name: "ParentChallenge", fields: [parentId], references: [id])
+  Parent   Challenge? @relation(name: "ParentChallenge", fields: [parentId], references: [id], onDelete: Cascade)
 
   subscriptions Subscription[]
-  Challenge     Challenge[]    @relation("ParentChallenge")
-  Milestone     Milestone[]
+  challenges    Challenge[]    @relation("ParentChallenge")
+  milestones    Milestone[]
 }
 
 model Milestone {
   id      Int     @id
-  Content Content @relation(fields: [id], references: [id])
+  content Content @relation(fields: [id], references: [id], onDelete: Cascade)
 
   challengeId Int
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 
   text      String
   createdAt DateTime @default(now())
@@ -79,16 +85,16 @@ model Comment {
   id Int @id @default(autoincrement())
 
   contentId Int
-  content   Content @relation(fields: [id], references: [id])
+  content   Content @relation(fields: [id], references: [id], onDelete: Cascade)
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   text      String
   createdAt DateTime @default(now())
 
   commentId      Int?
-  comment        Comment?  @relation(name: "CommentToReply", fields: [commentId], references: [id])
+  comment        Comment?  @relation(name: "CommentToReply", fields: [commentId], references: [id], onDelete: SetNull)
   commentToReply Comment[] @relation("CommentToReply")
 }
 
@@ -105,8 +111,8 @@ model ContentImage {
   contentId Int
   imageId   Int
 
-  content Content @relation(fields: [contentId], references: [id])
-  image   Image   @relation(fields: [imageId], references: [id])
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  image   Image   @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   pos Int
 
@@ -117,8 +123,8 @@ model Following {
   whoId  Int
   whomId Int
 
-  who  User @relation(name: "WhoFollows", fields: [whoId], references: [id])
-  whom User @relation(name: "WhoIsFollowed", fields: [whomId], references: [id])
+  who  User @relation(name: "WhoFollows", fields: [whoId], references: [id], onDelete: Cascade)
+  whom User @relation(name: "WhoIsFollowed", fields: [whomId], references: [id], onDelete: Cascade)
 
   @@id([whoId, whomId])
 }
@@ -127,8 +133,8 @@ model Subscription {
   challengeId Int
   userId      Int
 
-  challenge Challenge @relation(fields: [challengeId], references: [id])
-  user      User      @relation(name: "UserSubscriptions", fields: [userId], references: [id])
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user      User      @relation(name: "UserSubscriptions", fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([challengeId, userId])
 }
@@ -137,8 +143,8 @@ model Like {
   contentId Int
   userId    Int
 
-  content Content @relation(name: "LikedContent", fields: [contentId], references: [id])
-  user    User    @relation(name: "UserWhoLiked", fields: [userId], references: [id])
+  content Content @relation(name: "LikedContent", fields: [contentId], references: [id], onDelete: Cascade)
+  user    User    @relation(name: "UserWhoLiked", fields: [userId], references: [id], onDelete: SetNull)
 
   @@id([contentId, userId])
 }

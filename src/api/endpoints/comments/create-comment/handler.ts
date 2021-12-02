@@ -5,17 +5,21 @@ import {wrapHandler} from '../../../utils/handler-wrapper';
 import {schema} from './schema';
 
 export async function handler(req: Request, res: Response): Promise<void> {
-  const {name, email} = req.body;
+  const {contentId, text, commentId} = req.body;
 
-  const user = await prisma.user.create({
+  const comment = await prisma.comment.create({
+    //TODO add userId from auth data
     data: {
-      email,
-      name,
+      contentId,
+      text,
+      commentId,
+      userId: -1,
     },
   });
-  logger.info('Inserted new user in DB');
 
-  res.send(user);
+  logger.info('Inserted new comment into DB');
+
+  res.send(comment);
 }
 
-export const createUserHandler = wrapHandler(handler, schema);
+export const createCommentHandler = wrapHandler(handler, schema);

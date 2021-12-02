@@ -3,9 +3,10 @@ import {Schema} from 'ajv';
 export const schema: Schema = {
   type: 'object',
   properties: {
-    name: {type: 'string'},
-    email: {type: 'string'},
+    email: {type: 'string', format: 'email'},
+    password: {type: 'string', format: 'password'},
   },
-  required: ['name', 'email'],
+
+  required: ['email', 'password'],
   additionalProperties: false,
 };
