@@ -30,7 +30,7 @@ export async function handler(req: Request, res: Response): Promise<void> {
   logger.info('User logged in', {id: user.id, email: email});
 
   res.cookie('Authorization', token, {secure: true, httpOnly: true});
-  res.send();
+  res.send({token: token});
 }
 
 export const loginHandler = wrapHandler(handler, schema);
