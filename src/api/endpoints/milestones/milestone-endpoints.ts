@@ -3,8 +3,10 @@ import {createMilestoneHandler} from './create-milestone/handler';
 import {getMilestoneByIdHandler} from './get-milestone-by-id/handler';
 import {getMilestonesHandler} from './get-milestones/handler';
 
+const path = '/milestones';
+
 export function initMilestoneEndpoints(app: Application): void {
-  app.get('/milestones', getMilestonesHandler);
-  app.get('/milestones/:milestoneId', getMilestoneByIdHandler);
-  app.post('/milestones', createMilestoneHandler);
+  app.get(path, getMilestonesHandler);
+  app.get(`${path}/:milestoneId`, getMilestoneByIdHandler);
+  app.post(path, createMilestoneHandler);
 }

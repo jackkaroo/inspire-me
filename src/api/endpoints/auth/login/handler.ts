@@ -12,25 +12,25 @@ export async function handler(req: Request, res: Response): Promise<void> {
 
   const user = await prisma.user.findUnique({where: {email: email}});
 
-  if (!user || !bcrypt.compareSync(password, user.hash)) {
+  if (!user || !(await bcrypt.compare(password, user.hash))) {
     throw createHttpError(401, 'Wrong credentials.');
   }
 
-  const privateKey = process.env.PRIVATE_KEY;
+  const secret = process.env.SECRET;
 
-  if (!privateKey) {
-    throw createHttpError(502, 'Authentication impossible due to incorrect server configuration');
+  if (!secret) {
+    throw createHttpError(500, 'Improper server config. Please contact admin.');
   }
 
   //TODO add moderator
-  const token = jwt.sign({role: 'user', id: user.id}, privateKey, {
-    algorithm: 'RS256',
+  const token = jwt.sign({role: 'user', id: user.id}, secret, {
     expiresIn: '1h',
   });
 
-  logger.info('User logged in', {email: email});
+  logger.info('User logged in', {id: user.id, email: email});
 
-  res.send({token});
+  res.cookie('Authorization', token, {secure: true, httpOnly: true});
+  res.send();
 }
 
 export const loginHandler = wrapHandler(handler, schema);

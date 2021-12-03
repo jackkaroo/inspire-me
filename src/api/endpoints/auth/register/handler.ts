@@ -14,7 +14,7 @@ export async function handler(req: Request, res: Response): Promise<void> {
     throw createHttpError(400, `User with email ${email} already exists.`);
   }
 
-  const hash: string = bcrypt.hashSync(password, 13);
+  const hash: string = await bcrypt.hash(password, 13);
   const user = await prisma.user.create({
     data: {
       email,
