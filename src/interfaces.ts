@@ -1,4 +1,5 @@
 import {Request} from 'express';
+import {Schema} from 'ajv';
 
 export type AuthenticatedRequest = {
   user?: {
@@ -12,4 +13,8 @@ export type UserJwtInfo = {
   role: string;
 };
 
-export default AuthenticatedRequest;
+export type RequestValidationSchemas = {
+  body?: Schema;
+  query?: Schema;
+  params?: Schema;
+};

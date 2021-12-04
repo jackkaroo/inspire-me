@@ -1,7 +1,7 @@
-import {Request, Response} from 'express';
+import {Response} from 'express';
 import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
-import AuthenticatedRequest from '../../../../interfaces';
+import {AuthenticatedRequest} from '../../../../interfaces';
 import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
 import {schema} from './schema';

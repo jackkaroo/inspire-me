@@ -1,6 +1,7 @@
 import {Schema} from 'ajv';
+import {RequestValidationSchemas} from '../../../../interfaces';
 
-export const schema: Schema = {
+const bodySchema: Schema = {
   type: 'object',
   properties: {
     title: {type: 'string', isNotEmpty: true},
@@ -11,4 +12,8 @@ export const schema: Schema = {
 
   required: ['title', 'description'],
   additionalProperties: false,
+};
+
+export const schema: RequestValidationSchemas = {
+  body: bodySchema,
 };

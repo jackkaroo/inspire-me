@@ -4,7 +4,9 @@ import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
 
 export async function handler(req: Request, res: Response): Promise<void> {
-  const challenges = await prisma.challenge.findMany();
+  const challenges = await prisma.challenge.findMany({
+    where: {},
+  });
   //TODO add fetch by user Id & parentId
   logger.info('Fetched challenges from DB');
 
