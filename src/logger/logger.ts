@@ -6,8 +6,7 @@ const format = winston.format.combine(
 );
 
 const transports = [
-  new winston.transports.Console(),
-  // new winston.transports.File({filename: 'combined.log'}),
+  new winston.transports.Console(), // new winston.transports.File({filename: 'combined.log'}),
 ];
 
 export const logger = winston.createLogger({

@@ -11,12 +11,18 @@ export async function handler(req: Request, res: Response): Promise<void> {
     where: {
       id: parseInt(userId),
     },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
   });
-  logger.info('Fetched user from DB with id:', {message: userId});
 
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
+
+  logger.info('Fetched user from DB with id: ', {message: userId});
 
   res.send(user);
 }

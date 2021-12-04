@@ -2,24 +2,37 @@ import createHttpError, {HttpError} from 'http-errors';
 import {NextFunction, Request, Response} from 'express';
 import {Schema} from 'ajv';
 import {Prisma} from '@prisma/client';
+import {RequestValidationSchemas} from '../../interfaces';
 import {ajv} from './validator';
+
+function applyValidator(schema: Schema, data: any) {
+  const validate = ajv.compile(schema);
+  const valid = validate(data);
+
+  if (!valid) {
+    const details = validate.errors;
+
+    throw createHttpError(422, 'Unprocessable Entity', {details});
+  }
+}
 
 export function wrapHandler(
   handler: (req: Request, res: Response) => void,
-  schema?: Schema
+  validators?: RequestValidationSchemas
 ): (req: Request, res: Response, next: NextFunction) => void {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (schema) {
-        const data = req.body;
+      if (validators) {
+        if (validators.body) {
+          applyValidator(validators.body, req.body);
+        }
 
-        const validate = ajv.compile(schema);
-        const valid = validate(data);
+        if (validators.query) {
+          applyValidator(validators.query, req.query);
+        }
 
-        if (!valid) {
-          const details = validate.errors;
-
-          return next(createHttpError(422, 'Unprocessable Entity', {details}));
+        if (validators.params) {
+          applyValidator(validators.params, req.params);
         }
       }
 

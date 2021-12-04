@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {HttpError} from 'http-errors';
+import {logger} from '../../logger/logger';
 
 export function handleError(
   error: HttpError,
@@ -7,6 +8,7 @@ export function handleError(
   res: Response,
   next: NextFunction
 ): void {
+  logger.info('HTTP_ERROR', {message: error});
   if (res.headersSent) {
     next(error);
   } else {

@@ -2,20 +2,15 @@ import {Request, Response} from 'express';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
-import {schema} from './schema';
 
 export async function handler(req: Request, res: Response): Promise<void> {
-  const {name, email} = req.body;
-
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-    },
+  const challenges = await prisma.challenge.findMany({
+    where: {},
   });
-  logger.info('Inserted new user in DB');
+  //TODO add fetch by user Id & parentId
+  logger.info('Fetched challenges from DB');
 
-  res.send(user);
+  res.send(challenges);
 }
 
-export const createUserHandler = wrapHandler(handler, schema);
+export const getChallengesHandler = wrapHandler(handler);
