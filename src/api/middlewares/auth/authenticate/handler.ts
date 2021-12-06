@@ -2,7 +2,7 @@ import {NextFunction, Response} from 'express';
 import createHttpError from 'http-errors';
 import * as jwt from 'jsonwebtoken';
 import {prisma} from '../../../../dal/client';
-import {AuthenticatedRequest, UserJwtInfo} from '../../../../interfaces';
+import {AuthenticatedRequest, UserJwtInfo} from '../../../../types';
 import {logger} from '../../../../logger/logger';
 import {wrapMiddleware} from '../../../utils/middleware-wrapper';
 
@@ -11,11 +11,10 @@ export async function handler(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  let token = req.cookies.Authorization;
+  let token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    logger.info(token);
-    token = req.headers.authorization?.split(' ')[1];
+    token = req.cookies.Authorization;
     if (!token) {
       throw createHttpError(401, 'JWT not provided.');
     }
@@ -24,7 +23,7 @@ export async function handler(
   const secret = process.env.SECRET;
 
   if (!secret) {
-    throw createHttpError(500, 'Improper server config. Please contact admin.');
+    throw createHttpError(500, 'Improper server config. Unable to verify jwt.');
   }
 
   let tokenData;

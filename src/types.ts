@@ -5,6 +5,7 @@ export type AuthenticatedRequest = {
   user?: {
     id: number;
     role: string;
+    email: string;
   };
 } & Request;
 

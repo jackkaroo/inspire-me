@@ -2,7 +2,7 @@ import createHttpError, {HttpError} from 'http-errors';
 import {NextFunction, Request, Response} from 'express';
 import {Schema} from 'ajv';
 import {Prisma} from '@prisma/client';
-import {RequestValidationSchemas} from '../../interfaces';
+import {RequestValidationSchemas} from '../../types';
 import {ajv} from './validator';
 
 function applyValidator(schema: Schema, data: any) {

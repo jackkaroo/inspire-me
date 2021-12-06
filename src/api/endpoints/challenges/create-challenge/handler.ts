@@ -1,19 +1,15 @@
 import {Response} from 'express';
-import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {createContent} from '../../../../dal/content';
-import {AuthenticatedRequest} from '../../../../interfaces';
+import {AuthenticatedRequest} from '../../../../types';
 import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
+import unwrapUserData from '../../../utils/unwrap-user';
 import {schema} from './schema';
 
 export async function handler(req: AuthenticatedRequest, res: Response): Promise<void> {
   const {title, description, deadline, parentId} = req.body;
-  const userId = req.user?.id;
-
-  if (!userId) {
-    throw createHttpError(500, 'Auth was not set the for endpoint.');
-  }
+  const userId = unwrapUserData(req).id;
 
   const challenge = await prisma.$transaction(async prisma => {
     const content = await createContent('CHALLENGE', prisma);
