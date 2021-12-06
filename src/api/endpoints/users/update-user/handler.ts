@@ -12,6 +12,12 @@ export async function handler(req: AuthenticatedRequest, res: Response): Promise
   const updateResult = await prisma.user.update({
     where: {id: userId},
     data: req.body,
+    select: {
+      email: true,
+      name: true,
+      role: true,
+      avatarId: true,
+    },
   });
 
   logger.info('Updated user: ', {message: userId});
