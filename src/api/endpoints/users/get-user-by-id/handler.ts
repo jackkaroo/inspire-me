@@ -2,22 +2,19 @@ import {Request, Response} from 'express';
 import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
+import {UserDto} from '../../../dto/user-dto';
 import {wrapHandler} from '../../../utils/handler-wrapper';
 import {IdParamSchema} from '../../../utils/validator';
+import {userSelect} from '../inputs/select-input';
 
 export async function handler(req: Request, res: Response): Promise<void> {
   const {id} = req.params;
 
-  const user = await prisma.user.findUnique({
+  const user: UserDto | null = await prisma.user.findUnique({
     where: {
       id: parseInt(id),
     },
-    select: {
-      id: true,
-      email: true,
-      avatarId: true,
-      name: true,
-    },
+    select: userSelect,
   });
 
   if (!user) {

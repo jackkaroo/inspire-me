@@ -1,8 +1,10 @@
+import expressWinston from 'express-winston';
 import winston from 'winston';
 
 const format = winston.format.combine(
   winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss:ms'}),
-  winston.format.printf(info => `${info.timestamp}: ${info.message}`)
+  winston.format.printf(info => `${info.timestamp}: ${info.message}`),
+  winston.format.colorize()
 );
 
 const transports = [
@@ -14,3 +16,5 @@ export const logger = winston.createLogger({
   format,
   transports,
 });
+
+export const expressLogger = expressWinston.logger(logger);

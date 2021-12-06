@@ -1,12 +1,9 @@
 import {Request} from 'express';
 import {Schema} from 'ajv';
+import {UserDto} from './api/dto/user-dto';
 
 export type AuthenticatedRequest = {
-  user?: {
-    id: number;
-    role: string;
-    email: string;
-  };
+  user?: UserDto;
 } & Request;
 
 export type UserJwtInfo = {

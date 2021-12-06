@@ -3,7 +3,9 @@ import {Request, Response} from 'express';
 import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
+import {UserDto} from '../../../dto/user-dto';
 import {wrapHandler} from '../../../utils/handler-wrapper';
+import {userSelect} from '../../users/inputs/select-input';
 import {schema} from './schema';
 
 export async function handler(req: Request, res: Response): Promise<void> {
@@ -15,21 +17,16 @@ export async function handler(req: Request, res: Response): Promise<void> {
   }
 
   const hash: string = await bcrypt.hash(password, 13);
-  const user = await prisma.user.create({
+  const user: UserDto = await prisma.user.create({
     data: {
       email,
       name,
       hash,
       role: 'USER',
     },
-    select: {
-      email: true,
-      name: true,
-      role: true,
-      avatarId: true,
-    },
+    select: userSelect,
   });
-  logger.info('Inserted new user into DB');
+  logger.info('Inserted new user into DB with id', {message: user.id});
 
   res.send(user);
 }

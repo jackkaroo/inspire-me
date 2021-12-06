@@ -42,7 +42,7 @@ export async function handler(
     throw createHttpError(401, 'User not found');
   }
 
-  logger.info('Login successful.', {user});
+  logger.info('Middleware auth successful.', {message: JSON.stringify(user)});
 
   req.user = user;
   next();
