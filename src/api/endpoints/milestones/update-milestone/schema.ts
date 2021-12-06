@@ -7,7 +7,7 @@ const bodySchema: Schema = {
   properties: {
     text: {type: 'string', isNotEmpty: true},
   },
-  minProperties: 1, //anyOf: [{required: ['title']}, {required: ['description']}, {required: ['deadline']}],
+  minProperties: 1,
   additionalProperties: false,
 };
 

@@ -1,6 +1,6 @@
+import bcrypt from 'bcrypt';
 import {Request, Response} from 'express';
 import createHttpError from 'http-errors';
-import bcrypt from 'bcrypt';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
@@ -21,6 +21,12 @@ export async function handler(req: Request, res: Response): Promise<void> {
       name,
       hash,
       role: 'USER',
+    },
+    select: {
+      email: true,
+      name: true,
+      role: true,
+      avatarId: true,
     },
   });
   logger.info('Inserted new user into DB');

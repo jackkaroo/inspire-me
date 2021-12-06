@@ -1,0 +1,240 @@
+FOR ALL VALIDATION ISSUES THAT CAN BE HANDLED ON FRONT STATUS CODE IS 422
+
+FOR INVALID JWT CODE IS 401
+
+AUTH type: jwt in Authorization cookie or in header as Bearer <jwt>
+
+404 is obvious :)
+
+403 if you try to modify what is not yours
+
+for schemas:
+
+regex.id for query params - number that is >= 1
+regex.idOrNull for query params - number that is >= 1 or null (?commentId=null)
+NumericId is JSON number which is >= 1
+
+--------------------------------------------------------------------------
+
+POST /auth/login
+
+body {
+  properties: {
+    email: {type: 'string', format: 'email', isNotEmpty: true},
+    password: {type: 'string', format: 'password', isNotEmpty: true},
+  },
+  required: ['email', 'password'],
+};
+
+returns {
+	"token" : string
+}
+
+wrong credentials - 401
+
+//also sets token as cookie
+
+POST /auth/register
+
+body {
+  properties: {
+    name: {type: 'string', isNotEmpty: true},
+    email: {type: 'string', format: 'email', isNotEmpty: true},
+    password: {type: 'string', format: 'password', isNotEmpty: true},
+  },
+  required: ['name', 'email', 'password'],
+};
+
+returns user data as object
+
+email already taken - 409
+
+---------------------------------------------------------------------------------
+
+GET /users
+
+GET /users/:id
+
+PATCH /users/        //for PATCH & DELETE id is picked from auth, no need to pass it
+
+body {
+  properties: {
+    name: {type: 'string', isNotEmpty: true},
+    email: {type: 'string', format: 'email'},
+    avatarId: {type: ['number', 'null'], minimum: 1},
+  },
+  minProperties: 1,
+};
+
+DELETE /users/        //for PATCH & DELETE id is picked from auth, no need to pass it
+
+---------------------------------------------------------------------------------
+
+GET /challenges
+
+query {
+    parentId: {type: 'string', pattern: regex.idOrNull},
+    userId: {type: 'string', pattern: regex.id},
+};
+
+GET /challenges/:id
+
+POST /challenges
+
+body {
+  properties: {
+    title: {type: 'string', isNotEmpty: true},
+    description: {type: 'string', isNotEmpty: true},
+    deadline: {type: 'string', format: 'date'},
+    parentId: NumericId,
+  },
+  required: ['title', 'description'],
+};
+
+PATCH /challenges/:id
+
+body {
+  properties: {
+    title: {type: 'string', isNotEmpty: true},
+    description: {type: 'string', isNotEmpty: true},
+    deadline: {type: 'string', format: 'date'},
+  },
+  minProperties: 1,
+};
+
+DELETE /challenges/:id
+
+---------------------------------------------------------------------------------
+
+GET /milestones
+
+query {
+    challengeId: {type: 'string', pattern: regex.id},
+    userId: {type: 'string', pattern: regex.id},
+};
+
+GET /milestones/:id
+
+POST /milestones
+
+body {
+  properties: {
+    text: {type: 'string', isNotEmpty: true},
+    challengeId: NumericId,
+  },
+  required: ['text', 'challengeId'],
+};
+
+PATCH /milestones/:id
+
+body {
+  properties: {
+    text: {type: 'string', isNotEmpty: true},
+  },
+  minProperties: 1,
+};
+
+DELETE /milestones/:id
+
+---------------------------------------------------------------------------------
+
+GET /comments
+
+query {
+    contentId: {type: 'string', pattern: regex.id},
+    commentId: {type: 'string', pattern: regex.idOrNull},
+};
+
+GET /comments/:id
+
+POST /comments
+
+body {
+  properties: {
+    contentId: NumericId,
+    commentId: NumericId,
+    text: {type: 'string', isNotEmpty: true},
+  },
+  required: ['text', 'contentId'],
+};
+
+PATCH /comments/:id
+
+body {
+  properties: {
+    text: {type: 'string', isNotEmpty: true},
+  },
+  minProperties: 1,
+};
+
+DELETE /comments/:id
+
+---------------------------------------------------------------------------------
+
+GET /likes
+
+query {
+    userId: {type: 'string', pattern: regex.id},
+    contentId: {type: 'string', pattern: regex.id},
+};
+
+GET /likes/:contentId
+
+POST /likes
+
+body {
+  properties: {
+    contentId: NumericId,
+  },
+  required: ['contentId'],
+};
+
+DELETE /likes/:contentId
+
+---------------------------------------------------------------------------------
+
+GET /subscriptions
+
+query {
+    userId: {type: 'string', pattern: regex.id},
+    challengeId: {type: 'string', pattern: regex.id},
+  }
+
+GET /subscriptions/:challengeId
+
+POST /subscriptions
+
+body {
+  properties: {
+    challengeId: NumericId,
+  },
+  required: ['challengeId'],
+};
+
+DELETE /subscriptions/:challengeId
+
+---------------------------------------------------------------------------------
+
+GET /followings
+
+query {
+    whoId: {type: 'string', pattern: regex.id},
+    whomId: {type: 'string', pattern: regex.id},
+};
+
+GET /followings/:challengeId
+
+POST /followings
+
+body {
+  properties: {
+    whomId: NumericId,
+  },
+  required: ['whomId'],
+};
+
+DELETE /followings/:challengeId
+
+----------------------------------------------------------------------------------------
+
+images r comin (Hi Max)

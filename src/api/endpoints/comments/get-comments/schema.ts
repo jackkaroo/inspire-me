@@ -3,8 +3,13 @@ import {RequestValidationSchemas} from '../../../../types';
 import {regex} from '../../../utils/validator';
 
 const querySchema: Schema = {
-  contentId: {type: 'string', pattern: regex.id},
-  commentId: {type: 'string', pattern: regex.idOrNull},
+  type: 'object',
+  properties: {
+    contentId: {type: 'string', pattern: regex.id},
+    commentId: {type: 'string', pattern: regex.idOrNull},
+  },
+
+  additionalProperties: false,
 };
 
 export const schema: RequestValidationSchemas = {

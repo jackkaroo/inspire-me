@@ -5,7 +5,7 @@ import {initCommentEndpoints} from './comments/comment-endpoints';
 import {initFollowingEndpoints} from './followings/following-endpoints';
 import {initLikeEndpoints} from './likes/like-endpoints';
 import {initMilestoneEndpoints} from './milestones/milestone-endpoints';
-import {initSubscriptionEndpoints} from './subscriptions/like-endpoints';
+import {initSubscriptionEndpoints} from './subscriptions/subscription-endpoints';
 import {initUserEndpoints} from './users/user-endpoints';
 
 export function initEndpoints(app: Application): void {
