@@ -4,7 +4,6 @@ import {logger} from '../../../../logger/logger';
 import {AuthenticatedRequest} from '../../../../types';
 import {wrapHandler} from '../../../utils/handler-wrapper';
 import unwrapUserData from '../../../utils/unwrap-user';
-import {IdParamSchema} from '../../../utils/validator';
 
 export async function handler(req: AuthenticatedRequest, res: Response): Promise<void> {
   const userId = unwrapUserData(req).id;
@@ -16,4 +15,4 @@ export async function handler(req: AuthenticatedRequest, res: Response): Promise
   res.send(deletionResult);
 }
 
-export const deleteUserHandler = wrapHandler(handler, {params: IdParamSchema});
+export const deleteUserHandler = wrapHandler(handler);

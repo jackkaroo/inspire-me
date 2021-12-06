@@ -1,6 +1,5 @@
 import {Schema} from 'ajv';
 import {RequestValidationSchemas} from '../../../../types';
-import {IdParamSchema} from '../../../utils/validator';
 
 const bodySchema: Schema = {
   type: 'object',
@@ -15,5 +14,4 @@ const bodySchema: Schema = {
 
 export const schema: RequestValidationSchemas = {
   body: bodySchema,
-  params: IdParamSchema,
 };
