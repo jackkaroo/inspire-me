@@ -1,8 +1,7 @@
-import Ajv from 'ajv';
+import Ajv, {Schema} from 'ajv';
 import AjvFormats from 'ajv-formats';
 
 const validator = new Ajv();
-export const ajv = validator;
 
 validator.addKeyword({
   keyword: 'isNotEmpty',
@@ -11,3 +10,21 @@ validator.addKeyword({
 });
 
 AjvFormats(validator);
+
+export const ajv = validator;
+
+export const regex = {
+  id: '[1-9][0-9]*',
+  idOrNull: '([1-9][0-9]*)|null',
+};
+
+export const IdParamSchema: Schema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string', pattern: regex.id},
+  },
+  required: ['id'],
+  additionalProperties: false,
+};
+
+export const NumericId = {type: 'number', minimum: 1};

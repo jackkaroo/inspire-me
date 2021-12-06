@@ -11,7 +11,7 @@ export async function handler(req: Request, res: Response): Promise<void> {
   const existingUser = await prisma.user.findUnique({where: {email: email}});
 
   if (existingUser) {
-    throw createHttpError(400, `User with email ${email} already exists.`);
+    throw createHttpError(409, `User with email ${email} already exists.`);
   }
 
   const hash: string = await bcrypt.hash(password, 13);

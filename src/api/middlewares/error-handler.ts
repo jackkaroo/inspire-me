@@ -8,7 +8,7 @@ export function handleError(
   res: Response,
   next: NextFunction
 ): void {
-  logger.info('HTTP_ERROR', {message: error});
+  logger.info(req.url, {message: error});
   if (res.headersSent) {
     next(error);
   } else {

@@ -1,5 +1,5 @@
 import {Schema} from 'ajv';
-import {RequestValidationSchemas} from '../../../../interfaces';
+import {RequestValidationSchemas} from '../../../../types';
 
 const bodySchema: Schema = {
   type: 'object',

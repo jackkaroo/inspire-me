@@ -3,18 +3,20 @@ import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {logger} from '../../../../logger/logger';
 import {wrapHandler} from '../../../utils/handler-wrapper';
+import {IdParamSchema} from '../../../utils/validator';
 
 export async function handler(req: Request, res: Response): Promise<void> {
-  const {userId} = req.params;
+  const {id} = req.params;
 
   const user = await prisma.user.findUnique({
     where: {
-      id: parseInt(userId),
+      id: parseInt(id),
     },
     select: {
       id: true,
-      name: true,
       email: true,
+      avatarId: true,
+      name: true,
     },
   });
 
@@ -22,9 +24,9 @@ export async function handler(req: Request, res: Response): Promise<void> {
     throw createHttpError(404, 'User not found');
   }
 
-  logger.info('Fetched user from DB with id: ', {message: userId});
+  logger.info('Fetched user from DB with id: ', {message: id});
 
   res.send(user);
 }
 
-export const getUserByIdHandler = wrapHandler(handler);
+export const getUserByIdHandler = wrapHandler(handler, {params: IdParamSchema});

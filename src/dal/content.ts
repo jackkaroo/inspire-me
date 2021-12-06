@@ -39,4 +39,6 @@ export async function deleteContentById(id: number, client: any = prisma) {
   });
 
   logger.info(deletionResult);
+
+  return deletionResult;
 }

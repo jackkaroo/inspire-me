@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
 }
 
@@ -11,10 +11,10 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  email String  @unique
+  email String   @unique
   name  String
-  hash String
-  role UserRole
+  hash  String
+  role  UserRole
 
   avatarId Int?
   avatar   Image? @relation(fields: [avatarId], references: [id], onDelete: SetNull)
@@ -24,12 +24,13 @@ model User {
   likes         Like[]         @relation("UserWhoLiked")
   subscriptions Subscription[] @relation("UserSubscriptions")
   challenges    Challenge[]
-  comment       Comment[]
+  comments      Comment[]
+  milestones    Milestone[]
 }
 
 enum UserRole {
-    USER
-    MODERATOR
+  USER
+  MODERATOR
 }
 
 model Content {
@@ -76,6 +77,9 @@ model Milestone {
 
   challengeId Int
   challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   text      String
   createdAt DateTime @default(now())

@@ -25,6 +25,8 @@ export async function handler(req: Request, res: Response): Promise<void> {
   //TODO add moderator
   const token = jwt.sign({role: 'user', id: user.id}, secret, {
     expiresIn: '1h',
+    issuer: 'inpire-me',
+    subject: user.email,
   });
 
   logger.info('User logged in', {id: user.id, email: email});

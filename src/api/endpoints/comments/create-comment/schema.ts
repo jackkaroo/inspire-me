@@ -1,12 +1,13 @@
 import {Schema} from 'ajv';
-import {RequestValidationSchemas} from '../../../../interfaces';
+import {RequestValidationSchemas} from '../../../../types';
+import {NumericId} from '../../../utils/validator';
 
 const bodySchema: Schema = {
   type: 'object',
   properties: {
-    contentId: {type: 'number', min: 1},
-    commentId: {type: 'number', min: 1},
-    text: {type: 'string', isNotEmpty: 'true'},
+    contentId: NumericId,
+    commentId: NumericId,
+    text: {type: 'string', isNotEmpty: true},
   },
 
   required: ['text', 'contentId'],

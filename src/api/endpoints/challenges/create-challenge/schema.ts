@@ -1,5 +1,6 @@
 import {Schema} from 'ajv';
-import {RequestValidationSchemas} from '../../../../interfaces';
+import {RequestValidationSchemas} from '../../../../types';
+import {NumericId} from '../../../utils/validator';
 
 const bodySchema: Schema = {
   type: 'object',
@@ -7,7 +8,7 @@ const bodySchema: Schema = {
     title: {type: 'string', isNotEmpty: true},
     description: {type: 'string', isNotEmpty: true},
     deadline: {type: 'string', format: 'date'},
-    parentId: {type: 'number', minimum: 1},
+    parentId: NumericId,
   },
 
   required: ['title', 'description'],
