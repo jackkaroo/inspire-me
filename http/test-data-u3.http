@@ -1,0 +1,8 @@
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "Challenge 6",
+  "description": "Challenge 6 description. sv j nsrjg  aef jno3efh vfiJNE WDFIQH2UN edfiheajn difhaebjdnahekzfnvcaohdnvosfn"
+}

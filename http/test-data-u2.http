@@ -1,0 +1,19 @@
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "Challenge 4",
+  "description": "Challenge 4 description. sv j nsrjg  aef jno3efh vfiJNE WDFIQH2UN edfiheajn difhaebjdnahekzfnvcaohdnvosfn"
+}
+
+###
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "subchallenge for ch 4",
+  "parentId": 4,
+  "description": "Subchallenge for ch 4 description. Subchallenge for ch4  description. Subchallenge for ch 4 description. "
+}
