@@ -20,7 +20,10 @@ export async function handler(req: Request, res: Response): Promise<void> {
     where.challengeId = parseInt(challengeId as string);
   }
 
-  const subscriptions = await prisma.subscription.findMany({where: where});
+  const subscriptions = await prisma.subscription.findMany({
+    where: where,
+    include: {challenge: {select: {title: true}}},
+  });
   logger.info('Fetched subscriptions from DB');
 
   res.send(subscriptions);

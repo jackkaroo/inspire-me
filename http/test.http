@@ -1,0 +1,11 @@
+POST localhost:3000/followings
+Content-Type: application/json
+
+{
+  "whomId": 6
+}
+
+###
+GET localhost:3000/followings
+###
+GET localhost:3000/users
