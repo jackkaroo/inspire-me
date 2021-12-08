@@ -1,0 +1,65 @@
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "Challenge 1",
+  "description": "Challenge 1 description. sv j nsrjg  aef jno3efh vfiJNE WDFIQH2UN edfiheajn difhaebjdnahekzfnvcaohdnvosfn"
+}
+
+###
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "subchallenge 1 with id = 2 for ch 1",
+  "parentId": 1,
+  "description": "Subchallenge for ch 1 description. Subchallenge for ch 1 description. Subchallenge for ch 1 description. "
+}
+
+###
+
+POST http://localhost:3000/challenges
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "title": "subchallenge 2 with id = 3 for ch 1",
+  "parentId": 1,
+  "description": "Subchallenge for ch 1 description Subchallenge for ch 1 description Subchallenge for ch 1 description",
+  "deadline": "2021-12-10"
+}
+
+###
+
+POST http://localhost:3000/milestones
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "challengeId": 2,
+  "text" : "Milestone for challenge 2"
+}
+###
+
+POST http://localhost:3000/milestones
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "challengeId": 2,
+  "text" : "Milestone 2 for challenge 2"
+}
+
+
+###
+
+POST http://localhost:3000/milestones
+Authorization: {{access-token}}
+Content-Type: application/json
+
+{
+  "challengeId": 3,
+  "text" : "Milestone for subchallenge 3"
+}

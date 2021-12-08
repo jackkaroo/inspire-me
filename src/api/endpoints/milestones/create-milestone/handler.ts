@@ -13,13 +13,13 @@ export async function handler(req: AuthenticatedRequest, res: Response): Promise
   const {text, challengeId} = req.body;
   const userId = unwrapUserData(req).id;
 
+  const challenge = await prisma.challenge.findUnique({where: {id: challengeId}});
+
+  if (!challenge || challenge.userId !== userId) {
+    throw createHttpError(400, 'Provided challenge does not exist/belong to current user.');
+  }
+
   const milestone = await prisma.$transaction(async prisma => {
-    const challenge = await prisma.challenge.findUnique({where: {id: challengeId}});
-
-    if (!challenge || challenge.userId !== userId) {
-      throw createHttpError(400, 'Provided challenge does not exist/belong to current user.');
-    }
-
     const content = await createContent('MILESTONE', prisma);
 
     return await prisma.milestone.create({

@@ -29,8 +29,8 @@ export async function handler(
   let tokenData;
   try {
     tokenData = jwt.verify(token, secret) as UserJwtInfo;
-  } catch (e) {
-    next(e);
+  } catch (e: any) {
+    createHttpError(401, e.message);
 
     return;
   }
