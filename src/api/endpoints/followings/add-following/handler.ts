@@ -1,4 +1,5 @@
 import {Response} from 'express';
+import createHttpError from 'http-errors';
 import {prisma} from '../../../../dal/client';
 import {AuthenticatedRequest} from '../../../../types';
 import {wrapHandler} from '../../../utils/handler-wrapper';
@@ -8,6 +9,11 @@ import {schema} from './schema';
 export async function handler(req: AuthenticatedRequest, res: Response): Promise<void> {
   const userId = unwrapUserData(req).id;
   const whomId = parseInt(req.body.whomId as string);
+
+  if (userId === whomId) {
+    throw createHttpError(422, 'Cant subscribe to self');
+  }
+
   const following = await prisma.following.create({data: {whoId: userId, whomId: whomId}});
 
   res.send(following);

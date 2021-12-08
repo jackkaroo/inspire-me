@@ -22,7 +22,7 @@ export async function handler(req: Request, res: Response): Promise<void> {
 
   const subscriptions = await prisma.subscription.findMany({
     where: where,
-    include: {challenge: {select: {title: true}}},
+    include: {challenge: {select: {title: true, description: true, createdAt: true, id: true}}},
   });
   logger.info('Fetched subscriptions from DB');
 

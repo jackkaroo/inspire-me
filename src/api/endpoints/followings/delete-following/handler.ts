@@ -11,7 +11,7 @@ export async function handler(req: AuthenticatedRequest, res: Response): Promise
   const userId = unwrapUserData(req).id;
   const following = await prisma.following.delete({
     where: {
-      whoId_whomId: {whomId: userId, whoId: parseInt(id)},
+      whoId_whomId: {whoId: userId, whomId: parseInt(id)},
     },
   });
 
